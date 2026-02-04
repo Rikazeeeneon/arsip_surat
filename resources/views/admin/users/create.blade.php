@@ -1,0 +1,102 @@
+@extends('layouts.admin')
+
+@section('content')
+
+<!-- HEADER -->
+<div class="mb-6">
+    <h1 class="text-2xl font-semibold">Buat Akun User</h1>
+    <p class="text-sm text-gray-500">Tambahkan akun user baru ke sistem</p>
+</div>
+
+<!-- FORM CARD -->
+<div class="bg-white rounded-lg shadow p-6 max-w-xl">
+
+    @if ($errors->any())
+        <div class="mb-4 bg-red-50 text-red-700 p-3 rounded text-sm">
+            <ul class="list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-4">
+        @csrf
+
+
+        <!-- USERNAME -->
+        <div>
+            <label class="block text-sm font-medium mb-1">Username</label>
+            <input
+                type="text"
+                name="username"
+                value="{{ old('username') }}"
+                class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+            >
+        </div>
+
+        <!-- PASSWORD -->
+        <div>
+            <label class="block text-sm font-medium mb-1">Password</label>
+             <input
+            type="password"
+            name="password"
+            id="password"
+            required
+            class="w-full px-3 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-200 pr-10">
+
+        <button
+            type="button"
+            onclick="togglePassword()"
+            class=" text-gray-500 hover:text-blue-600">
+            <span id="eye">👁</span>
+        </div>
+
+        <!-- ROLE -->
+        <div>
+            <label class="block text-sm font-medium mb-1">Role</label>
+            <select
+                name="role"
+                class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+
+        <!-- BUTTON -->
+        <div class="pt-2 flex gap-3">
+            <button
+                type="submit"
+                class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-orange-700 transition"
+            >
+                Simpan User
+            </button>
+
+            <a
+                href="{{ route('admin.dashboard') }}"
+                class="px-5 py-2 rounded-lg border hover:bg-gray-50 transition"
+            >
+                Batal
+            </a>
+        </div>
+    </form>
+</div>
+
+@endsection
+<script>
+function togglePassword() {
+    const input = document.getElementById('password');
+    const eye = document.getElementById('eye');
+
+    if (input.type === 'password') {
+        input.type = 'text';
+        eye.textContent = '🙈';
+    } else {
+        input.type = 'password';
+        eye.textContent = '👁';
+    }
+}
+</script>
