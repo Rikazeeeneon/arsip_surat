@@ -19,16 +19,17 @@ class PengajuanController extends Controller
 
   public function store(Request $request)
 {
+  
     $request->validate([
         'nomor_surat'   => 'required',
         'tanggal_surat' => 'required|date',
         'asal_surat'    => 'required',
 
         'tujuan'        => 'required|array',
-        'kabkota'       => 'required|array',
+        'kabkota'       => 'nullable|array',
 
         'berkas'        => 'required|array',
-        'berkas.*'      => 'file|mimes:pdf,jpg,png|max:10000',
+        'berkas.*'      => 'file|mimes:pdf|max:10000',
     ]);
 
     $pengajuan = Pengajuan::create([

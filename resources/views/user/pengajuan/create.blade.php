@@ -147,7 +147,7 @@
             <h2 class="font-semibold mb-4">📍 Tujuan Kabupaten / Kota</h2>
 <div class="mt-6">
     <label class="block font-semibold mb-2">
-        Tujuan Kabupaten / Kota <span class="text-red-500">*</span>
+        Tujuan Kabupaten / Kota (opsional)
     </label>
 
     <div class="max-h-40 overflow-y-auto border rounded p-3 space-y-2">

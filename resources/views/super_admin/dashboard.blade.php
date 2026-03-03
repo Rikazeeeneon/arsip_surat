@@ -8,11 +8,10 @@
     </div>
 @endif
 
-<!-- HEADER -->
 <div class="flex items-center justify-between mb-6">
     <div>
-        <h1 class="text-2xl font-semibold">Dashboard Admin</h1>
-        <p class="text-sm text-gray-500">Ringkasan data pengajuan surat</p>
+        <h1 class="text-2xl font-semibold">Dashboard Super Admin</h1>
+        <p class="text-sm text-gray-500">Monitoring seluruh pengajuan surat</p>
     </div>
 
     <div class="text-sm text-gray-500">
@@ -20,7 +19,6 @@
     </div>
 </div>
 
-<!-- STATISTIC -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
     <div class="bg-white p-5 rounded-lg shadow">
         <p class="text-sm text-gray-500">Total Pengajuan</p>
@@ -38,7 +36,6 @@
     </div>
 </div>
 
-<!-- TABLE -->
 <div class="bg-white rounded-lg shadow overflow-hidden">
     <div class="p-4 border-b">
         <h2 class="font-semibold">Daftar Pengajuan</h2>
@@ -62,12 +59,11 @@
                     <td class="px-4 py-3">{{ $pengajuan->nomor_surat }}</td>
                     <td class="px-4 py-3">{{ $pengajuan->tanggal_surat }}</td>
                     <td class="px-4 py-3">
-                        <span class="px-2 py-1 rounded text-xs font-medium">
-                            <x-status-badge :status="$pengajuan->status" />
-                        </span>
+                        <x-status-badge :status="$pengajuan->status" />
+                    
                     </td>
                     <td class="px-4 py-3">
-                        <a href="{{ route('admin.pengajuan.show', $pengajuan->id) }}"
+                        <a href="{{ route('super_admin.pengajuan.show', $pengajuan->id) }}"
                            class="text-blue-600 hover:underline font-medium">
                             Detail
                         </a>

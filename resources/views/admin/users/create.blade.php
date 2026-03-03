@@ -21,7 +21,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-4">
+    <form method="POST" action="{{ route('super_admin.users.store') }}" class="space-y-4">
         @csrf
 
 
@@ -76,7 +76,7 @@
             </button>
 
             <a
-                href="{{ route('admin.dashboard') }}"
+                href="{{ route('super_admin.users.index') }}"
                 class="px-5 py-2 rounded-lg border hover:bg-gray-50 transition"
             >
                 Batal

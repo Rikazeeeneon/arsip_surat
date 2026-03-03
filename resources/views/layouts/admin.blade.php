@@ -2,9 +2,8 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Panel</title>
+    <title>Panel</title>
 
-    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,43 +15,47 @@
     <!-- SIDEBAR -->
     <aside class="w-64 bg-blue-800 text-white fixed inset-y-0 left-0">
         <div class="h-16 flex items-center justify-center border-b border-blue-700 font-semibold text-lg">
-            Admin Panel
+            {{ auth()->user()->role === 'super_admin' ? 'Super Admin Panel' : 'Admin Panel' }}
         </div>
 
-    <nav class="p-4 space-y-2 text-sm">
+        <nav class="p-4 space-y-2 text-sm">
 
-    <!-- DASHBOARD -->
-    <a href="{{ route('admin.dashboard') }}"
-       class="
-           block px-4 py-2 rounded-lg transition
-           hover:bg-blue-700
-           {{ request()->routeIs('admin.dashboard') ? 'bg-blue-700 shadow text-white' : 'text-blue-100' }}
-       ">
-        Dashboard
-    </a>
+            {{-- DASHBOARD --}}
+            @if(auth()->user()->role === 'admin')
+                <a href="{{ route('admin.dashboard') }}"
+                   class="block px-4 py-2 rounded-lg transition hover:bg-blue-700
+                   {{ request()->routeIs('admin.dashboard') ? 'bg-blue-700 shadow text-white' : 'text-blue-100' }}">
+                    Dashboard
+                </a>
+            @endif
 
-    <!-- DAFTAR USER -->
-    <a href="{{ route('admin.users.index') }}"
-       class="
-           block px-4 py-2 rounded-lg transition
-           hover:bg-blue-700
-           {{ request()->routeIs('admin.users.index') ? 'bg-blue-700 shadow text-white' : 'text-blue-100' }}
-       ">
-        Daftar User
-    </a>
+            @if(auth()->user()->role === 'super_admin')
+                <a href="{{ route('super_admin.dashboard') }}"
+                   class="block px-4 py-2 rounded-lg transition hover:bg-blue-700
+                   {{ request()->routeIs('super_admin.dashboard') ? 'bg-blue-700 shadow text-white' : 'text-blue-100' }}">
+                    Dashboard
+                </a>
+            @endif
 
-    <!-- BUAT USER -->
-    <a href="{{ route('admin.users.create') }}"
-       class="
-           block px-4 py-2 rounded-lg transition
-           hover:bg-blue-700
-           {{ request()->routeIs('admin.users.create') ? 'bg-blue-700 shadow text-white' : 'text-blue-100' }}
-       ">
-        Buat User
-    </a>
 
-</nav>
+            {{-- MENU KHUSUS SUPER ADMIN --}}
+            @if(auth()->user()->role === 'super_admin')
 
+                <a href="{{ route('super_admin.users.index') }}"
+                   class="block px-4 py-2 rounded-lg transition hover:bg-blue-700
+                   {{ request()->routeIs('super_admin.users.index') ? 'bg-blue-700 shadow text-white' : 'text-blue-100' }}">
+                    Daftar User
+                </a>
+
+                <a href="{{ route('super_admin.users.create') }}"
+                   class="block px-4 py-2 rounded-lg transition hover:bg-blue-700
+                   {{ request()->routeIs('super_admin.users.create') ? 'bg-blue-700 shadow text-white' : 'text-blue-100' }}">
+                    Buat User
+                </a>
+
+            @endif
+
+        </nav>
     </aside>
 
     <!-- CONTENT AREA -->
@@ -60,32 +63,32 @@
 
         <!-- NAVBAR -->
         <header class="h-16 bg-blue-600 text-white flex items-center justify-between px-6 sticky top-0 z-50 shadow">
-            <!-- LEFT -->
+
             <div class="flex items-center gap-3">
                 <img
-    src="{{ asset('images/logo csirt.png') }}"
-    alt="Logo"
-    class="w-24 h-24 rounded-full object-contain"
-/>
+                    src="{{ asset('images/logo csirt.png') }}"
+                    alt="Logo"
+                    class="w-20 h-20 rounded-full object-contain"
+                />
                 <span class="font-medium text-sm">
-                    Dashboard Admin
+                    {{ auth()->user()->role === 'super_admin' ? 'Dashboard Super Admin' : 'Dashboard Admin' }}
                 </span>
             </div>
 
-            <!-- RIGHT -->
             <div class="flex items-center gap-4 text-sm">
                 <span>
                     Selamat datang,
-                    {{ auth()->user()->name ?? 'Admin' }}
+                    {{ auth()->user()->username ?? 'User' }}
                 </span>
 
-                <form action="/logout" method="POST">
+                <form action="{{ route('logout') }}" method="POST">
                     @csrf
                     <button class="bg-blue-900 px-3 py-1 rounded hover:bg-blue-950">
                         Logout
                     </button>
                 </form>
             </div>
+
         </header>
 
         <!-- MAIN -->

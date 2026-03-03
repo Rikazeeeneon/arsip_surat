@@ -28,12 +28,17 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-       if (Auth::user()->role === 'admin') {
+       $request->session()->regenerate();
 
-            return redirect('/admin/dashboard');
-        }
+if (Auth::user()->role === 'super_admin') {
+    return redirect('/super-admin/dashboard');
+}
 
-        return redirect('/pengajuan/create');
+if (Auth::user()->role === 'admin') {
+    return redirect('/admin/dashboard');
+}
+
+return redirect('/pengajuan/create');
     }
 
     public function logout(Request $request)

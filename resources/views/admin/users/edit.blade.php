@@ -20,7 +20,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('admin.users.update', $user->id) }}" class="space-y-4">
+    <form method="POST" action="{{ route('super_admin.users.update', $user->id) }}" class="space-y-4">
         @csrf
         @method('PUT')
         
@@ -77,7 +77,7 @@
                 Simpan Perubahan
             </button>
 
-            <a href="{{ route('admin.users.index') }}"
+            <a href="{{ route('super_admin.users.index') }}"
                class="px-5 py-2 rounded-lg border hover:bg-gray-50 transition">
                 Batal
             </a>

@@ -9,7 +9,7 @@
         <p class="text-sm text-gray-500">Kelola akun user yang terdaftar</p>
     </div>
 
-    <a href="{{ route('admin.users.create') }}"
+    <a href="{{ route('super_admin.users.create') }}"
        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition">
         + Buat User
     </a>
@@ -36,13 +36,13 @@
                         <td class="px-4 py-3 space-x-3">
 
     <!-- EDIT -->
-    <a href="{{ route('admin.users.edit', $user->id) }}"
+    <a href="{{ route('super_admin.users.edit', $user->id) }}"
        class="text-blue-600 hover:underline font-medium">
         Edit
     </a>
 
     <!-- HAPUS -->
-    <form action="{{ route('admin.users.destroy', $user->id) }}"
+    <form action="{{ route('super_admin.users.destroy', $user->id) }}"
           method="POST"
           class="inline"
           onsubmit="return confirm('Yakin ingin menghapus user ini?')">

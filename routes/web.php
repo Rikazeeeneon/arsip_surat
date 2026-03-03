@@ -5,14 +5,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\User\PengajuanController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
+use App\Http\Controllers\SuperAdmin\UserController;
 
 /*
 |--------------------------------------------------------------------------
 | PUBLIC
 |--------------------------------------------------------------------------
 */
-
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -24,16 +24,9 @@ Route::get('/', function () {
 */
 Route::get('/login', [LoginController::class, 'show'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate']);
-Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth');
-
-/*
-|--------------------------------------------------------------------------
-| DASHBOARD UMUM (SETELAH LOGIN)
-|--------------------------------------------------------------------------
-*/
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
+Route::post('/logout', [LoginController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +45,7 @@ Route::middleware('auth')->group(function () {
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth', 'role:user'])->group(function () {
+
     Route::get('/pengajuan/create', [PengajuanController::class, 'create'])
         ->name('pengajuan.create');
 
@@ -59,51 +53,47 @@ Route::middleware(['auth', 'role:user'])->group(function () {
         ->name('pengajuan.store');
 });
 
+/*
+|--------------------------------------------------------------------------
+| ADMIN (HANYA PROSES SURAT)
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->as('admin.')
+    ->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
+
+    Route::get('/pengajuan/{pengajuan}', 
+        [DashboardController::class, 'show'])
+        ->name('pengajuan.show');
+
+    Route::post('/pengajuan/{pengajuan}/status', 
+        [DashboardController::class, 'updateStatus'])
+        ->name('pengajuan.update-status');
+});
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN
+| SUPER ADMIN (KELOLA USER & LIHAT SURAT)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'role:super_admin'])
+    ->prefix('super-admin')
+    ->as('super_admin.')
+    ->group(function () {
 
-    Route::get('/pengajuan/live', function () {
-        return \App\Models\Pengajuan::latest()->get();
-    });
+    // Dashboard
+    Route::get('/dashboard', [SuperAdminDashboardController::class, 'index'])
+        ->name('dashboard');
 
-    // dashboard admin
-    Route::get('/dashboard', [DashboardController::class, 'index'])
-        ->name('admin.dashboard');
+    // Detail Surat (Read Only)
+    Route::get('/pengajuan/{pengajuan}', 
+        [SuperAdminDashboardController::class, 'show'])
+        ->name('pengajuan.show');
 
-
-
-    // lihat detail pengajuan
-    Route::get('/pengajuan/{pengajuan}', [DashboardController::class, 'show'])
-        ->name('admin.pengajuan.show');
-
-    // update status pengajuan
-    Route::post('/pengajuan/{pengajuan}/status', [DashboardController::class, 'updateStatus'])
-        ->name('admin.pengajuan.update-status');
-
-    // manajemen user
-    Route::get('/users', [UserController::class, 'index'])
-        ->name('admin.users.index');
-
-    Route::get('/users/create', [UserController::class, 'create'])
-        ->name('admin.users.create');
-
-    Route::post('/users', [UserController::class, 'store'])
-        ->name('admin.users.store');
-    Route::get('/users/{user}/edit', [UserController::class, 'edit'])
-        ->name('admin.users.edit');
-
-    Route::put('/users/{user}', [UserController::class, 'update'])
-        ->name('admin.users.update');
-
-    Route::delete('/users/{user}', [UserController::class, 'destroy'])
-        ->name('admin.users.destroy');
+    // RESOURCE USERS (TIDAK DOBEL)
+    Route::resource('users', UserController::class);
 });
-
-Route::post('/logout', [LoginController::class, 'logout'])
-    ->middleware('auth')
-    ->name('logout');
